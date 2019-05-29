@@ -1,0 +1,11 @@
+DIR1     one/to_be_removed
+   DIR2  two/created
+
+         one/aaa/bbb/to_be_moved
+MOV      two/aaa/to_be_moved
+
+         one/aaa/bbb/to_be_renamed
+    REN  two/aaa/bbb/renamed
+
+         one/ccc/to_be_moved_and_renamed
+MOV REN  two/ccc/ddd/moved_and_renamed
