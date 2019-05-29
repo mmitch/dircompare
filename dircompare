@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# list changes in directory trees consisting of hardlinked files
+# list differences between directory trees consisting of hardlinked files
 
 # Copyright (C) 2019  Christian Garbs <mitch@cgarbs.de>
 #
