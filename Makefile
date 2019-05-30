@@ -3,5 +3,4 @@
 all:	test
 
 test:
-	cd test; ./test.sh && echo TEST OK || echo TEST FAILED
-
+	cd test; if ./test.sh; then echo TEST OK; else echo TEST FAILED; false; fi
