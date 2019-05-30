@@ -4,11 +4,13 @@ set -e
 
 # before
 ROOTDIR="$(mktemp -d dircompare-test.XXXXXX)"
-LOG="$(realpath "$ROOTDIR"/log)"
+LOG_ABSPATH="$( cd "$ROOTDIR"; echo "$(pwd)"/log )"
 exec 3>&1
-trap "cat $LOG 1>&3" ERR
-exec >"$LOG"
+trap "cat $LOG_ABSPATH 1>&3" ERR
+exec >"$LOG_ABSPATH"
 exec 2>&1
+echo ROOTDIR="$ROOTDIR"
+echo LOG_ABSPATH="$LOG_ABSPATH"
 set -vx
 cp ../dircompare "$ROOTDIR"
 cp expected "$ROOTDIR"
