@@ -11,7 +11,7 @@ exec >"$LOG_ABSPATH"
 exec 2>&1
 echo ROOTDIR="$ROOTDIR"
 echo LOG_ABSPATH="$LOG_ABSPATH"
-set -vx
+set -v
 cp ../dircompare "$ROOTDIR"
 cp expected "$ROOTDIR"
 pushd "$ROOTDIR"
@@ -41,7 +41,7 @@ touch two/to_be_recreated_with_different_inode
 ./dircompare one two > actual
 
 # then
-diff expected actual
+diff -Nau expected actual
 echo "Test OK"
 
 # after (if successful)
