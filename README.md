@@ -49,6 +49,23 @@ Afterwards I do a `cp -rl` of the current tree on my hard drive as a
 new baseline for the next compare.
 
 
+### output legend
+
+- `DIR1`:   file only exists in the first directory tree
+- `DIR2`:   file only exists in the second directory tree
+- `REN`:    file has been renamed
+- `MOV`:    file has been moved to another directory
+- `COPIED`: name and subdirectory match between both trees, but the
+            file is no longer hardlinked but a real, separate copy
+
+`REN`, `MOV` and `COPIED` are displayed in pairs: the first line shows
+the filename in the first directory tree, the second line shows the
+filename in the second directory tree.
+
+Unchanged files (same name, same relative location) are not displayed
+at all.
+
+
 ## installation
 
  - Perl
