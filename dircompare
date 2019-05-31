@@ -51,6 +51,7 @@ sub register_file
 	BASENAME => $basename,
 	FULLNAME => $fullname,
 	RELDIR   => $reldir,
+	RELNAME  => File::Spec->join($reldir, $basename),
     };
 
     my $key = $dev.':'.$inode;
@@ -74,11 +75,35 @@ my $unique_to_1 = $keys_in_1 - $keys_in_2;
 my $unique_to_2 = $keys_in_2 - $keys_in_1;
 my $common = $keys_in_1 * $keys_in_2;
 
+# find files with same name, but different inode
+my %unique_filenames_in_1 = map { $fileset1->{$_}->{RELNAME} => $_  } $unique_to_1->elements;
+my @copied;
+foreach my $key_in_2 ($unique_to_2->elements) {
+    my $relname_in_2 = $fileset2->{$key_in_2}->{RELNAME};
+    if (exists $unique_filenames_in_1{$relname_in_2}) {
+	my $key_in_1 = $unique_filenames_in_1{$relname_in_2};
+	push @copied, {
+	    KEY_IN_1 => $key_in_1,
+	    KEY_IN_2 => $key_in_2,
+	};
+    }
+}
+# do removals in an extra step to not mess up the $unique_to_2 iterator
+foreach my $copied (@copied) {
+    $unique_to_1->delete($copied->{KEY_IN_1});
+    $unique_to_2->delete($copied->{KEY_IN_2});
+}
+
 # print results
 sub sort_by_name
 {
     my $fileset = shift;
     return $fileset->{$a}->{FULLNAME} cmp $fileset->{$b}->{FULLNAME};
+}
+
+sub sort_by_name_in_copied
+{
+    return $fileset1->{$a->{KEY_IN_1}}->{FULLNAME} cmp $fileset1->{$b->{KEY_IN_1}}->{FULLNAME};
 }
 
 foreach my $key (sort { sort_by_name $fileset1 } $unique_to_1->elements) {
@@ -89,6 +114,15 @@ foreach my $key (sort { sort_by_name $fileset1 } $unique_to_1->elements) {
 foreach my $key (sort { sort_by_name $fileset2 } $unique_to_2->elements) {
     my $file = $fileset2->{$key};
     printf "%7s  %s\n", 'DIR2', $file->{FULLNAME};
+}
+
+foreach my $copied (sort { sort_by_name_in_copied } @copied) {
+    my $file1 = $fileset1->{$copied->{KEY_IN_1}};
+    my $file2 = $fileset2->{$copied->{KEY_IN_2}};
+
+    print "\n";
+    printf "%7s  %s\n", '', $file1->{FULLNAME};
+    printf "%-7s  %s\n", 'COPIED', $file2->{FULLNAME};
 }
 
 foreach my $key (sort { sort_by_name $fileset1 } $common->elements) {

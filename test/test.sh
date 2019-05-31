@@ -23,6 +23,7 @@ mkdir -p one/ccc
 touch one/unchanged one/to_be_removed
 touch one/aaa/bbb/to_be_renamed one/aaa/bbb/to_be_moved
 touch one/ccc/to_be_moved_and_renamed
+touch one/to_be_recreated_with_different_inode
 
 cp -rl one two
 
@@ -33,6 +34,8 @@ rm    two/to_be_removed
 mv    two/aaa/bbb/to_be_renamed two/aaa/bbb/renamed
 mv    two/aaa/bbb/to_be_moved   two/aaa
 mv    two/ccc/to_be_moved_and_renamed two/ccc/ddd/moved_and_renamed
+rm    two/to_be_recreated_with_different_inode
+touch two/to_be_recreated_with_different_inode
 
 # when
 ./dircompare one two > actual

@@ -1,6 +1,9 @@
 DIR1     one/to_be_removed
    DIR2  two/created
 
+         one/to_be_recreated_with_different_inode
+COPIED   two/to_be_recreated_with_different_inode
+
          one/aaa/bbb/to_be_moved
 MOV      two/aaa/to_be_moved
 
